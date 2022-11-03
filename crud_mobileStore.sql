@@ -49,3 +49,33 @@ FROM customershippinginfo
 INNER JOIN shoporder ON customershippinginfo.idCustomer = shoporder.CustomerID
 WHERE shoporder.Status IN ("In Progress", "New")
 ORDER BY city DESC;
+
+-- BonusTask1
+/* 
+Transactions are SQL commands which are logically connected.
+The tranactions have to been run completly to databases stay uncontroversial (they won't cause conflict).
+And we have to solve that a database will be consistent in case of transaction interruption.
+It is used usually when the database have more user/modifier.
+It has 4 command: START, COMMIT (to save the changes in the memory), ROLLBACK (roll back/delete the changes),
+ROLLBACK TO ( roll back to a savepoint),  SAVEPOINT (roll back this points), (SET TRANSACTION (initiation th transaction))
+//ACID rules - Atomicity, Consistency, Isolation, Durability)//
+*/
+
+-- START TRANSACTION; - if I set the characteristics 
+BEGIN;
+SAVEPOINT ORIGINAL; 
+DELETE from smartphone
+WHERE idPhone = "GS22+Blck256";
+
+SAVEPOINT SP_1;
+UPDATE smartphone
+SET Price = 670
+WHERE idPhone = "IP13MBg128";
+
+SAVEPOINT SP_2;
+ROLLBACK TO SAVEPOINT ORIGINAL;
+COMMIT;
+
+SELECT * from smartphone;
+
+  
